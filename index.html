@@ -79,7 +79,7 @@ button{font-family:var(--ui);font-size:1rem;cursor:pointer}
 .steps li{padding-left:3px}
 
 /* reading surface */
-.passage-wrap{position:relative;isolation:isolate;touch-action:pan-y}
+.passage-wrap{position:relative;isolation:isolate;touch-action:pan-y;margin-top:22px}
 .passage{
   font-family:var(--read);font-size:1.19rem;line-height:1.78;
   display:flex;flex-direction:column;gap:1.05em;
@@ -226,7 +226,7 @@ var TEXTS = {
 "De siste årene har forskere sett at det blir færre bier i mange land. En grunn er at det finnes færre blomsterenger enn før. En annen grunn er sprøytemidler som bøndene bruker mot skadedyr.",
 "Noen bønder har begynt å la en stripe med blomster stå langs åkeren. Da får biene mat, og bonden får bedre avling."],
     q:[{t:"Hva tar bien med seg fra blomsten?",o:["Bare nektar","Nektar og pollen","Frø","Blader"],c:1},
-       {t:"Hvorfor er bier viktige for plantene?",o:["De spiser skadedyr","De vanner plantene","De frakter pollen, slik at plantene kan lage frø","De graver i jorda"],c:2},
+       {t:"Hvorfor er bier viktige for plantene?",o:["De spiser skadedyr","De vanner plantene","De frakter pollen, slik at plantene kan lage frø","De frakter nektar til andre planter"],c:2},
        {t:"Hva gjør noen bønder for å hjelpe biene?",o:["De slutter å dyrke epler","De lar en stripe med blomster stå langs åkeren","De setter ut vann","De flytter biene inn om vinteren"],c:1}]},
   B:{title:"Maur og maurtuer",
     body:["En maurtue ser ut som en haug med barnåler, men inni er den full av ganger og rom. Maurene bygger tua selv, nål for nål. En stor tue kan være hjem for flere hundre tusen maur.",
@@ -234,7 +234,7 @@ var TEXTS = {
 "Hver maur har sin egen jobb. Noen henter mat, noen bygger, og noen passer på eggene. Dronningen gjør bare én ting: hun legger egg. Hun kan leve i mange år.",
 "Maur er nyttige i skogen. De spiser insekter som kan skade trærne, og de blander jorda når de graver. Der det er mange maurtuer, er skogen ofte friskere.",
 "Hvis du finner en maurtue, bør du la den stå. Det tar mange år å bygge en ny."],
-    q:[{t:"Hva er en maurtue bygget av?",o:["Jord og stein","Barnåler","Gress","Bark fra trær"],c:1},
+    q:[{t:"Hvor mange maur kan bo i en stor maurtue?",o:["Noen hundre","Noen tusen","Flere hundre tusen","Flere millioner"],c:2},
        {t:"Hvordan holder maurene tua varm?",o:["De tenner på barnåler","De varmer seg i sola og gir varmen fra seg inne i tua","De bærer inn varmt vann","De lukker alle ganger"],c:1},
        {t:"Hva er dronningens oppgave?",o:["Å bygge tua","Å hente mat","Å legge egg","Å passe på temperaturen"],c:2}]}
  },
@@ -246,37 +246,37 @@ var TEXTS = {
 "Nordlys er derfor ikke jevnt fordelt over hele himmelen. Det danner et belte rundt den magnetiske polen, kalt nordlysovalen. Oslo ligger som regel utenfor dette beltet, mens Tromsø ligger midt i det. Det er grunnen til at nordlys er langt vanligere i Nord-Norge.",
 "Når sola er spesielt aktiv, utvider ovalen seg sørover. Da kan nordlys ses helt nede i Sør-Europa. Slike kraftige utbrudd kan samtidig forstyrre radiosamband og satellitter, og i sjeldne tilfeller påvirke strømnettet på bakken."],
     q:[{t:"Hvorfor ser vi nordlys oftest nær polene?",o:["Sola står lavere der","Magnetfeltet er åpnere der, så partiklene kommer ned i atmosfæren","Lufta er kaldere der","Atmosfæren er tynnere ved ekvator"],c:1},
-       {t:"Hva bestemmer fargen på nordlyset?",o:["Temperaturen på bakken","Hvor fort solvinden beveger seg","Hvilken gass som treffes, og hvor høyt det skjer","Årstiden"],c:2},
-       {t:"Hva kan skje når sola er spesielt aktiv?",o:["Nordlysovalen trekker seg sammen mot polen","Nordlyset blir bare grønt","Ovalen utvider seg sørover og kan forstyrre satellitter","Nordlyset forsvinner helt"],c:2}]},
+       {t:"Hva bestemmer fargen på nordlyset?",o:["Temperaturen på bakken","Farten til solvinden","Hvilken gass som treffes","Årstiden"],c:2},
+       {t:"Hva kan skje når sola er spesielt aktiv?",o:["Ovalen trekker seg mot polen","Nordlyset blir bare grønt","Ovalen utvider seg sørover","Nordlyset forsvinner helt"],c:2}]},
   B:{title:"Tidevann",
     body:["Tidevann skyldes først og fremst månens tyngdekraft. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
-"Samtidig oppstår det en tilsvarende bulning på motsatt side av jorda. Grunnen er at jorda selv blir trukket mer mot månen enn vannet som ligger lengst unna. Resultatet er to flodbulninger, på hver sin side av kloden.",
+"Samtidig oppstår det en tilsvarende bulning på motsatt side av jorda. Grunnen er at jorda i seg selv blir trukket mer mot månen enn vannet som ligger lengst unna. Resultatet er to flodbulninger, på hver sin side av kloden.",
 "Jorda roterer gjennom disse bulningene i løpet av et døgn. Et sted på kysten passerer derfor to ganger gjennom flo og to ganger gjennom fjære hvert døgn. Siden månen også beveger seg i sin egen bane, forskyves tidspunktene med omtrent 50 minutter hver dag.",
 "Sola virker på samme måte, men svakere, fordi den er så langt unna. Når sol og måne står på linje, legger kreftene seg oppå hverandre. Da blir forskjellen mellom flo og fjære ekstra stor, og vi kaller det springflo. Står de i rett vinkel på hverandre, motvirker de delvis hverandre, og forskjellen blir liten.",
 "Kystens form har også mye å si. I trange fjorder og smale sund kan vannet presses sammen, og tidevannsforskjellen blir langt større enn ute i åpent hav."],
-    q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Sola trekker fra den siden","Jorda selv trekkes mer mot månen enn vannet lengst unna","Vinden presser vannet dit","Havbunnen skyver vannet opp"],c:1},
+    q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Havstrømmer fører vannet rundt til den siden","Jorda i seg selv trekkes mer mot månen enn vannet lengst unna","Vinden presser vannet dit","Havbunnen skyver vannet opp"],c:1},
        {t:"Hvorfor forskyves tidspunktene for flo og fjære hver dag?",o:["Jorda roterer saktere om vinteren","Sola endrer posisjon","Månen beveger seg i sin egen bane","Vannet blir tyngre"],c:2},
        {t:"Når blir forskjellen mellom flo og fjære størst?",o:["Når sol og måne står i rett vinkel","Når månen er lengst unna","Når sol og måne står på linje","Om sommeren"],c:2}]}
  },
  3:{
-  A:{title:"Antibiotikaresistens",
-    body:["Antibiotika er medisiner som dreper bakterier. De virker ved å ødelegge deler bakterien trenger for å leve, for eksempel den ytre veggen rundt cellen. Menneskeceller har ikke en slik vegg. Derfor rammer medisinen bakterien og ikke pasienten.",
-"Bakterier formerer seg svært raskt. Hver gang de deler seg, kan det oppstå små tilfeldige endringer i arvestoffet. Noen av disse endringene gjør bakterien motstandsdyktig mot en bestemt medisin. Når medisinen brukes, dør de vanlige bakteriene, mens de motstandsdyktige overlever og formerer seg videre. Etter en stund er det bare disse igjen.",
-"Bakterier kan også gi slike egenskaper videre til hverandre, ikke bare til sine egne avkom. En egenskap som oppstår hos én type bakterie, kan derfor dukke opp hos en helt annen type.",
-"Jo mer antibiotika som brukes, jo raskere går utviklingen. Resepter som ikke trengs, kurer som avbrytes, og stor bruk i husdyrhold bidrar alle. Samtidig lages det få nye antibiotika. Å utvikle en ny medisin er dyrt, og den skal helst brukes minst mulig. Det gjør det lite lønnsomt.",
-"Dette rammer mer enn vanlige infeksjoner. Operasjoner og kreftbehandling forutsetter at infeksjoner kan stoppes."],
-    q:[{t:"Hvorfor rammer antibiotika bakteriene og ikke pasienten?",o:["Bakterier er mindre enn menneskeceller","Menneskeceller har ikke den ytre veggen som medisinen ødelegger","Medisinen brytes ned før den når cellene våre","Kroppen varmer opp medisinen"],c:1},
-       {t:"Hvorfor blir det flere motstandsdyktige bakterier når medisinen brukes?",o:["Medisinen skaper nye bakterier","Bakteriene slutter å dele seg","De vanlige dør, mens de motstandsdyktige overlever og formerer seg","Bakteriene flytter seg til andre deler av kroppen"],c:2},
-       {t:"Hvorfor lages det få nye antibiotika?",o:["Forskerne finner ingen nye bakterier","De gamle virker fortsatt like bra","Det er dyrt, og medisinen skal helst brukes minst mulig","Det er forbudt i de fleste land"],c:2}]},
-  B:{title:"Kunstgjødsel og nitrogen",
-    body:["Planter trenger nitrogen for å vokse. Nesten 80 prosent av lufta rundt oss er nitrogen, men plantene kan ikke bruke det slik det er. Nitrogenet i lufta sitter nemlig bundet sammen to og to, og den bindingen er svært sterk. Den må brytes først.",
-"I naturen er det bakterier som gjør denne jobben. De sitter blant annet på røttene til erter og kløver. Fram til rundt år 1900 var det dette som bestemte hvor mye mat en åker kunne gi.",
-"Rundt 1910 fant man en måte å gjøre det samme i fabrikk. Nitrogen fra lufta blir presset sammen med hydrogen under høyt trykk og høy varme. Resultatet kan gjøres om til kunstgjødsel. Plutselig kunne bøndene dyrke langt mer mat på samme areal enn før.",
-"Men det har en bakside. Prosessen bruker mye energi, og hydrogenet hentes som regel fra naturgass. I tillegg tar ikke plantene opp all gjødselen. Resten renner ut i elver og innsjøer. Der vokser alger kraftig. Når algene dør, bruker nedbrytingen opp oksygenet i vannet, og fisk og andre dyr kveles.",
-"Derfor jobber forskere med to ting: å lage hydrogenet med fornybar kraft, og å gjødsle mer nøyaktig."],
-    q:[{t:"Hvorfor kan ikke plantene bruke nitrogenet i lufta slik det er?",o:["Det er for lite nitrogen i lufta","Nitrogenet sitter bundet sammen med en svært sterk binding","Nitrogenet sitter for høyt oppe","Røttene når ikke opp i lufta"],c:1},
-       {t:"Hva ble mulig etter oppfinnelsen rundt 1910?",o:["Bøndene sluttet å dyrke erter og kløver","Landbruket begynte å bruke mindre energi","Bøndene kunne dyrke langt mer mat på samme areal","Gjødsel kunne hentes rett fra havet"],c:2},
-       {t:"Hvorfor kveles fisk i vann med mye gjødsel i?",o:["Gjødselen er giftig for fisk","Vannet blir for varmt","Nedbrytingen av alger bruker opp oksygenet i vannet","Algene spiser opp maten til fisken"],c:2}]}
+  A:{title:"Litium i batterier",
+    body:["Nesten alle oppladbare batterier bruker litium. Grunnen er at litium er det letteste metallet som finnes, og at det har svært høy energitetthet. Det er derfor en mobil kan være tynn og likevel vare en hel dag.",
+"Det meste av verdens litium kommer fra to steder. Noe hentes fra gruver i Australia, der metallet sitter bundet i stein. Resten kommer fra saltsletter i Chile og Argentina, der saltlake pumpes opp fra undergrunnen og ut i store fordampingsdammer. Sola fordamper vannet, og litiumet blir igjen.",
+"Den andre metoden er billig, men den bruker mye vann. Områdene det gjelder, er blant de tørreste på jorda, og bøndene i nærheten merker at grunnvannet synker.",
+"Fordi etterspørselen etter elbiler har økt raskere enn utvinningen har klart å følge, har prisen på litium svingt kraftig de siste årene, noe som i sin tur har gjort det mer lønnsomt å utvikle batterier som ikke trenger metallet i det hele tatt.",
+"Derfor jobbes det med to ting. Det ene er å gjenvinne litium fra gamle batterier. Det andre er å lage batterier som bruker natrium, et stoff det finnes nok av i vanlig havsalt."],
+    q:[{t:"Hvorfor brukes litium i batterier?",o:["Det er det billigste metallet","Det er lett og gir mye energi","Det finnes bare i havvann","Det tåler høy varme best"],c:1},
+       {t:"Hvordan hentes litium ut på saltslettene?",o:["Steinen knuses i møller","Salt vann fordampes av sola","Metallet skrapes av bakken","Vannet kjøles ned til is"],c:1},
+       {t:"Hvorfor merker bøndene i nærheten noe til utvinningen?",o:["Grunnvannet synker","Lufta blir forurenset","Veiene blir ødelagt","Strømmen blir dyrere"],c:0}]},
+  B:{title:"Sand i betong",
+    body:["Betong er det mest brukte byggematerialet i verden. Den består av sement, vann og tilslag, og tilslaget — i hovedsak sand og grus — utgjør omtrent to tredjedeler av volumet. Derfor går det enorme mengder sand med til hus, veier og broer.",
+"Man skulle tro det var nok av den. Sahara alene er full av sand. Men ørkensand kan ikke brukes. Kornene har blitt slipt runde av vinden gjennom tusenvis av år, og runde korn glir fra hverandre i stedet for å låse seg sammen. Sand til betong må ha skarpe kanter.",
+"Slik sand finnes i elveleier, innsjøer og på havbunnen, der sedimentene er brutt ned av rennende vann. Den hentes opp ved mudring, med store sugerør fra lektere.",
+"Det skaper problemer. Når sand fjernes fra en elvebunn, graver elva seg dypere, og elvebreddene raser ut. Ettersom uttaket flere steder skjer raskere enn elva klarer å erstatte sedimentene, senkes elvebunnen varig, noe som undergraver fundamentene til broer som er bygget for en helt annen vannstand.",
+"Derfor leter man etter andre løsninger. Den ene er å knuse gammel betong og bruke den om igjen. Den andre er å male opp stein fra steinbrudd, slik at man får skarpe korn uten å røre elvene."],
+    q:[{t:"Hvorfor kan ikke ørkensand brukes i betong?",o:["Den inneholder mye salt","Kornene er for runde","Den er for lys","Den blir for varm"],c:1},
+       {t:"Hvor hentes sanden til betong fra?",o:["Fra ørkener og sanddyner","Fra åkrer og jorder","Fra elver og havbunn","Fra fjelltopper og brear"],c:2},
+       {t:"Hva skjer når sand fjernes fra en elvebunn?",o:["Elva tørker inn","Vannet blir varmere","Elva skifter farge","Elvebreddene raser ut"],c:3}]},
  }
 };
 
