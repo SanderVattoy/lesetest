@@ -91,13 +91,13 @@ button{font-family:var(--ui);font-size:1rem;cursor:pointer}
 #maskFade{position:absolute;left:0;right:0;bottom:0;height:26px;
   background:linear-gradient(to bottom,var(--paper),color-mix(in srgb,var(--paper) 25%,transparent))}
 #maskHandle{
-  position:absolute;right:-2px;z-index:3;width:34px;height:34px;margin-top:-17px;
-  align-items:center;cursor:grab;touch-action:none;background:none;border:none;padding:0;
-  display:none;
+  position:absolute;right:-7px;z-index:3;width:48px;height:48px;margin-top:-24px;
+  align-items:center;justify-content:center;cursor:grab;touch-action:none;
+  background:none;border:none;padding:0;display:none;
 }
 #maskHandle:active{cursor:grabbing}
 #maskHandle .grip{
-  flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);
+  flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent);
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 1px 6px rgba(0,0,0,.28);
 }
@@ -124,23 +124,22 @@ hr{border:none;border-top:1px solid var(--line);margin:0}
 <!-- 1. intro -->
 <section id="s-intro" class="stack">
   <div class="stack" style="gap:8px">
-    <span class="eyebrow">Leseforsøk · ENT4000</span>
+    <span class="eyebrow">Leseforsøk · Universitetet i Oslo</span>
     <h1>Lesetest</h1>
   </div>
   <p>Du skal lese to korte tekster og svare på tre spørsmål om hver av dem. Det tar omtrent 5 minutter.</p>
   <p>Vi måler hvor lang tid du bruker, men dette er ikke en prøve. Ingen får vite hvordan akkurat du svarte, og resultatet påvirker ingenting på skolen.</p>
-  <div class="note">Vi lagrer ingen navn, e-postadresser eller annet som kan knyttes til deg. Bare alderstrinn, tidsbruk og svarene dine.</div>
+  <div class="note">Vi lagrer ingen navn, e-postadresser eller annet som kan knyttes til deg. Bare hvilket trinn du går i, tidsbruk og svarene dine.</div>
   <p class="muted">Les i ditt vanlige tempo. Ikke gå tilbake i teksten når du har svart.</p>
   <div><button class="btn" id="go-age">Start</button></div>
 </section>
 
 <!-- 2. age -->
 <section id="s-age" class="stack" hidden>
-  <h2>Hvor gammel er du?</h2>
+  <h2>Hvilket trinn går du i?</h2>
   <div class="choices" id="ageChoices">
-    <button class="choice" data-grp="1"><span class="k">1</span><span>10–12 år</span></button>
-    <button class="choice" data-grp="2"><span class="k">2</span><span>13–15 år</span></button>
-    <button class="choice" data-grp="3"><span class="k">3</span><span>16–19 år</span></button>
+    <button class="choice" data-grp="1"><span class="k">1</span><span>5.–7. trinn</span></button>
+    <button class="choice" data-grp="2"><span class="k">2</span><span>8.–10. trinn</span></button>
   </div>
   <div><button class="btn" id="go-brief1" disabled>Videre</button></div>
 </section>
@@ -171,6 +170,7 @@ hr{border:none;border-top:1px solid var(--line);margin:0}
 <!-- 5. reading -->
 <section id="s-read" class="stack" hidden>
   <span class="progress" id="readProgress"></span>
+  <p class="muted" id="readHint" hidden>Dra den grønne knappen nedover mens du leser. Du kan også trykke i teksten for å flytte linjen dit.</p>
   <div class="passage-wrap" id="readWrap">
     <div class="passage" id="readText"></div>
   </div>
@@ -240,43 +240,23 @@ var TEXTS = {
  },
  2:{
   A:{title:"Nordlys",
-    body:["Nordlys oppstår fordi sola sender ut en strøm av ladde partikler. Denne strømmen kalles solvind, og den treffer jorda hele tiden. De fleste partiklene blir avbøyd av jordas magnetfelt, som fungerer omtrent som et skjold.",
-"Men nær polene er magnetfeltet åpnere. Der kan partiklene følge magnetfeltlinjene og komme langt ned i atmosfæren. Når de kolliderer med gassene der oppe, overfører de energi til gassmolekylene. Molekylene gir energien fra seg igjen som lys.",
+    body:["Nordlys oppstår fordi sola sender ut en strøm av ladde partikler. Denne strømmen kalles solvind, og den treffer jorda hele tiden. De fleste partiklene blir avbøyd i magnetosfæren og kommer aldri ned.",
+"Men nær polene er magnetfeltet åpnere. Der kan partiklene følge magnetfeltlinjene og komme langt ned i atmosfæren. Når de kolliderer med gassene der oppe, overfører de energi til gassmolekylene. De eksiterte molekylene gir energien fra seg igjen som lys.",
 "Fargen avhenger av hvilken gass som treffes, og hvor høyt oppe det skjer. Oksygen gir grønt lys i omtrent 100 til 150 kilometers høyde. Høyere oppe gir oksygen et rødt skjær, men dette er svakere og sjeldnere. Nitrogen gir blått og fiolett, ofte nederst i nordlysbuen.",
-"Nordlys er derfor ikke jevnt fordelt over hele himmelen. Det danner et belte rundt den magnetiske polen, kalt nordlysovalen. Oslo ligger som regel utenfor dette beltet, mens Tromsø ligger midt i det. Det er grunnen til at nordlys er langt vanligere i Nord-Norge.",
-"Når sola er spesielt aktiv, utvider ovalen seg sørover. Da kan nordlys ses helt nede i Sør-Europa. Slike kraftige utbrudd kan samtidig forstyrre radiosamband og satellitter, og i sjeldne tilfeller påvirke strømnettet på bakken."],
-    q:[{t:"Hvorfor ser vi nordlys oftest nær polene?",o:["Sola står lavere der","Magnetfeltet er åpnere der, så partiklene kommer ned i atmosfæren","Lufta er kaldere der","Atmosfæren er tynnere ved ekvator"],c:1},
+"Nordlys er derfor ikke jevnt fordelt over hele himmelen. Fordi partiklene følger magnetfeltlinjene inn mot polene, samler nordlyset seg i et belte i stedet for å spre seg jevnt utover himmelen. Beltet kalles nordlysovalen. Oslo ligger som regel utenfor det, mens Tromsø ligger midt i det.",
+"Når sola er spesielt aktiv, utvider ovalen seg sørover. Da kan nordlys ses helt nede i Sør-Europa. Slike kraftige utbrudd kan samtidig forstyrre radiosamband og satellitter."],
+    q:[{t:"Hvorfor ser vi nordlys oftest nær polene?",o:["Sola står lavere der","Lufta er kaldere der","Magnetfeltet er åpnere der","Atmosfæren er tynnere ved ekvator"],c:2},
        {t:"Hva bestemmer fargen på nordlyset?",o:["Temperaturen på bakken","Farten til solvinden","Hvilken gass som treffes","Årstiden"],c:2},
-       {t:"Hva kan skje når sola er spesielt aktiv?",o:["Ovalen trekker seg mot polen","Nordlyset blir bare grønt","Ovalen utvider seg sørover","Nordlyset forsvinner helt"],c:2}]},
+       {t:"Hva kan skje når sola er spesielt aktiv?",o:["Ovalen trekker seg mot polen","Nordlyset blir bare grønt","Nordlyset forsvinner helt","Ovalen utvider seg sørover"],c:3}]},
   B:{title:"Tidevann",
-    body:["Tidevann skyldes først og fremst månens tyngdekraft. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
+    body:["Tidevann skyldes først og fremst tidekreftene fra månen. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
 "Samtidig oppstår det en tilsvarende bulning på motsatt side av jorda. Grunnen er at jorda i seg selv blir trukket mer mot månen enn vannet som ligger lengst unna. Resultatet er to flodbulninger, på hver sin side av kloden.",
 "Jorda roterer gjennom disse bulningene i løpet av et døgn. Et sted på kysten passerer derfor to ganger gjennom flo og to ganger gjennom fjære hvert døgn. Siden månen også beveger seg i sin egen bane, forskyves tidspunktene med omtrent 50 minutter hver dag.",
-"Sola virker på samme måte, men svakere, fordi den er så langt unna. Når sol og måne står på linje, legger kreftene seg oppå hverandre. Da blir forskjellen mellom flo og fjære ekstra stor, og vi kaller det springflo. Står de i rett vinkel på hverandre, motvirker de delvis hverandre, og forskjellen blir liten.",
-"Kystens form har også mye å si. I trange fjorder og smale sund kan vannet presses sammen, og tidevannsforskjellen blir langt større enn ute i åpent hav."],
-    q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Havstrømmer fører vannet rundt til den siden","Jorda i seg selv trekkes mer mot månen enn vannet lengst unna","Vinden presser vannet dit","Havbunnen skyver vannet opp"],c:1},
-       {t:"Hvorfor forskyves tidspunktene for flo og fjære hver dag?",o:["Jorda roterer saktere om vinteren","Sola endrer posisjon","Månen beveger seg i sin egen bane","Vannet blir tyngre"],c:2},
-       {t:"Når blir forskjellen mellom flo og fjære størst?",o:["Når sol og måne står i rett vinkel","Når månen er lengst unna","Når sol og måne står på linje","Om sommeren"],c:2}]}
- },
- 3:{
-  A:{title:"Litium i batterier",
-    body:["Nesten alle oppladbare batterier bruker litium. Grunnen er at litium er det letteste metallet som finnes, og at det har svært høy energitetthet. Det er derfor en mobil kan være tynn og likevel vare en hel dag.",
-"Det meste av verdens litium kommer fra to steder. Noe hentes fra gruver i Australia, der metallet sitter bundet i stein. Resten kommer fra saltsletter i Chile og Argentina, der saltlake pumpes opp fra undergrunnen og ut i store fordampingsdammer. Sola fordamper vannet, og litiumet blir igjen.",
-"Den andre metoden er billig, men den bruker mye vann. Områdene det gjelder, er blant de tørreste på jorda, og bøndene i nærheten merker at grunnvannet synker.",
-"Fordi etterspørselen etter elbiler har økt raskere enn utvinningen har klart å følge, har prisen på litium svingt kraftig de siste årene, noe som i sin tur har gjort det mer lønnsomt å utvikle batterier som ikke trenger metallet i det hele tatt.",
-"Derfor jobbes det med to ting. Det ene er å gjenvinne litium fra gamle batterier. Det andre er å lage batterier som bruker natrium, et stoff det finnes nok av i vanlig havsalt."],
-    q:[{t:"Hvorfor brukes litium i batterier?",o:["Det er det billigste metallet","Det er lett og gir mye energi","Det finnes bare i havvann","Det tåler høy varme best"],c:1},
-       {t:"Hvordan hentes litium ut på saltslettene?",o:["Steinen knuses i møller","Salt vann fordampes av sola","Metallet skrapes av bakken","Vannet kjøles ned til is"],c:1},
-       {t:"Hvorfor merker bøndene i nærheten noe til utvinningen?",o:["Grunnvannet synker","Lufta blir forurenset","Veiene blir ødelagt","Strømmen blir dyrere"],c:0}]},
-  B:{title:"Sand i betong",
-    body:["Betong er det mest brukte byggematerialet i verden. Den består av sement, vann og tilslag, og tilslaget — i hovedsak sand og grus — utgjør omtrent to tredjedeler av volumet. Derfor går det enorme mengder sand med til hus, veier og broer.",
-"Man skulle tro det var nok av den. Sahara alene er full av sand. Men ørkensand kan ikke brukes. Kornene har blitt slipt runde av vinden gjennom tusenvis av år, og runde korn glir fra hverandre i stedet for å låse seg sammen. Sand til betong må ha skarpe kanter.",
-"Slik sand finnes i elveleier, innsjøer og på havbunnen, der sedimentene er brutt ned av rennende vann. Den hentes opp ved mudring, med store sugerør fra lektere.",
-"Det skaper problemer. Når sand fjernes fra en elvebunn, graver elva seg dypere, og elvebreddene raser ut. Ettersom uttaket flere steder skjer raskere enn elva klarer å erstatte sedimentene, senkes elvebunnen varig, noe som undergraver fundamentene til broer som er bygget for en helt annen vannstand.",
-"Derfor leter man etter andre løsninger. Den ene er å knuse gammel betong og bruke den om igjen. Den andre er å male opp stein fra steinbrudd, slik at man får skarpe korn uten å røre elvene."],
-    q:[{t:"Hvorfor kan ikke ørkensand brukes i betong?",o:["Den inneholder mye salt","Kornene er for runde","Den er for lys","Den blir for varm"],c:1},
-       {t:"Hvor hentes sanden til betong fra?",o:["Fra ørkener og sanddyner","Fra åkrer og jorder","Fra elver og havbunn","Fra fjelltopper og brear"],c:2},
-       {t:"Hva skjer når sand fjernes fra en elvebunn?",o:["Elva tørker inn","Vannet blir varmere","Elva skifter farge","Elvebreddene raser ut"],c:3}]},
+"Sola virker på samme måte, men svakere, fordi den er så langt unna. Når sol og måne står på linje, legger kreftene seg oppå hverandre. Da blir forskjellen mellom flo og fjære ekstra stor, og vi kaller det springflo. Står de i rett vinkel på hverandre, motvirker de delvis hverandre.",
+"Kystens form har også mye å si. Når tidevannsbølgen presses inn i en stadig trangere fjord, øker amplituden innover, og forskjellen mellom flo og fjære blir derfor større innerst enn ute ved munningen."],
+    q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Havstrømmer fører vannet dit","Jorda trekkes mer mot månen enn vannet","Vinden presser vannet utover","Havbunnen skyver vannet opp"],c:1},
+       {t:"Hvorfor forskyves tidspunktene for flo og fjære hver dag?",o:["Jorda roterer saktere om vinteren","Sola flytter seg nærmere jorda","Månen beveger seg i egen bane","Vannet blir tyngre om natta"],c:2},
+       {t:"Når blir forskjellen mellom flo og fjære størst?",o:["Når sol og måne står på linje","Når sol og måne står i rett vinkel","Når månen er lengst unna jorda","Når det er storm på havet"],c:0}]}
  }
 };
 
@@ -455,6 +435,7 @@ function startRead(){
   var box=el("readText");box.innerHTML="";
   var h=document.createElement("h3");h.textContent=d.title;box.appendChild(h);
   d.body.forEach(function(para){var p=document.createElement("p");p.textContent=para;box.appendChild(p);});
+  el("readHint").hidden=(cond!=="mask");
   show("s-read");
   if(cond==="mask")attachMask(el("readWrap"),null);
   t0=performance.now();
