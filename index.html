@@ -1,0 +1,591 @@
+<!doctype html><html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>Lesetest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: single centered column, one screen visible at a time, max 62ch for running text */
+:root{
+  --paper:#f7f8f9;
+  --ink:#1b2127;
+  --ink-soft:#5a656f;
+  --line:#dde2e6;
+  --accent:#1f6f6b;
+  --accent-soft:#e3efee;
+  --warn:#9a5b1d;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --read:"Source Serif 4",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#15191d;
+    --ink:#e8ecef;
+    --ink-soft:#9aa5ae;
+    --line:#2b3238;
+    --accent:#5bbdb6;
+    --accent-soft:#1d2e2d;
+    --warn:#d4a06a;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#15191d;
+  --ink:#e8ecef;
+  --ink-soft:#9aa5ae;
+  --line:#2b3238;
+  --accent:#5bbdb6;
+  --accent-soft:#1d2e2d;
+  --warn:#d4a06a;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--ui);
+  font-size:16px;
+  line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:28px 48px;
+}
+main{max-width:660px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font-family:var(--ui);font-size:1.5rem;font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h2{font-family:var(--ui);font-size:1.15rem;font-weight:600;margin:0;text-wrap:balance}
+p{margin:0}
+.muted{color:var(--ink-soft);font-size:.92rem}
+.stack{display:flex;flex-direction:column;gap:14px}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);font-weight:600}
+button{font-family:var(--ui);font-size:1rem;cursor:pointer}
+.btn{
+  background:var(--accent);color:var(--paper);border:none;border-radius:7px;
+  padding:13px 22px;font-weight:600;min-height:48px;
+}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-quiet{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:13px 22px;font-weight:500;min-height:48px}
+.choices{display:flex;flex-direction:column;gap:10px}
+.choice{
+  display:flex;gap:12px;align-items:flex-start;
+  border:1px solid var(--line);border-radius:8px;padding:13px 15px;
+  background:transparent;text-align:left;width:100%;min-width:0;color:var(--ink);
+  font-size:1rem;line-height:1.4;
+}
+.choice[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.choice .k{font-weight:600;color:var(--ink-soft);flex:none;width:1.2em}
+.choice[aria-pressed="true"] .k{color:var(--accent)}
+.q{display:flex;flex-direction:column;gap:11px;padding-block:4px}
+.q + .q{border-top:1px solid var(--line);padding-top:20px}
+.qtext{font-weight:500;line-height:1.45}
+.note{border-left:3px solid var(--accent);padding:2px 0 2px 14px;color:var(--ink-soft);font-size:.92rem}
+.steps{display:flex;flex-direction:column;gap:9px;margin:0;padding-left:22px}
+.steps li{padding-left:3px}
+
+/* reading surface */
+.passage-wrap{position:relative;isolation:isolate;touch-action:pan-y}
+.passage{
+  font-family:var(--read);font-size:1.19rem;line-height:1.78;
+  display:flex;flex-direction:column;gap:1.05em;
+  max-width:62ch;
+}
+.passage h3{font-family:var(--read);font-size:1.3rem;font-weight:600;margin:0;line-height:1.35}
+#maskLayer{position:absolute;left:-8px;right:-8px;top:0;z-index:2;pointer-events:none;display:none}
+#maskFill{position:absolute;left:0;right:0;top:0;bottom:26px;background:var(--paper)}
+#maskFade{position:absolute;left:0;right:0;bottom:0;height:26px;
+  background:linear-gradient(to bottom,var(--paper),color-mix(in srgb,var(--paper) 25%,transparent))}
+#maskHandle{
+  position:absolute;right:-2px;z-index:3;width:34px;height:34px;margin-top:-17px;
+  align-items:center;cursor:grab;touch-action:none;background:none;border:none;padding:0;
+  display:none;
+}
+#maskHandle:active{cursor:grabbing}
+#maskHandle .grip{
+  flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 6px rgba(0,0,0,.28);
+}
+#maskHandle .grip svg{display:block}
+#maskHandle:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.progress{font-size:.78rem;color:var(--ink-soft);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.codebox{
+  font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.85rem;
+  border:1px solid var(--line);border-radius:8px;padding:14px;
+  background:color-mix(in srgb,var(--ink) 4%,var(--paper));
+  word-break:break-all;line-height:1.6;user-select:all;
+}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:3px 11px;font-size:.78rem;color:var(--ink-soft)}
+hr{border:none;border-top:1px solid var(--line);margin:0}
+@media (max-width:420px){
+  .passage{font-size:1.11rem}
+  h1{font-size:1.32rem}
+}
+</style>
+
+</head><body><main>
+
+<!-- 1. intro -->
+<section id="s-intro" class="stack">
+  <div class="stack" style="gap:8px">
+    <span class="eyebrow">Leseforsøk · ENT4000</span>
+    <h1>Lesetest</h1>
+  </div>
+  <p>Du skal lese to korte tekster og svare på tre spørsmål om hver av dem. Det tar omtrent 5 minutter.</p>
+  <p>Vi måler hvor lang tid du bruker, men dette er ikke en prøve. Ingen får vite hvordan akkurat du svarte, og resultatet påvirker ingenting på skolen.</p>
+  <div class="note">Vi lagrer ingen navn, e-postadresser eller annet som kan knyttes til deg. Bare alderstrinn, tidsbruk og svarene dine.</div>
+  <p class="muted">Les i ditt vanlige tempo. Ikke gå tilbake i teksten når du har svart.</p>
+  <div><button class="btn" id="go-age">Start</button></div>
+</section>
+
+<!-- 2. age -->
+<section id="s-age" class="stack" hidden>
+  <h2>Hvor gammel er du?</h2>
+  <div class="choices" id="ageChoices">
+    <button class="choice" data-grp="1"><span class="k">1</span><span>10–12 år</span></button>
+    <button class="choice" data-grp="2"><span class="k">2</span><span>13–15 år</span></button>
+    <button class="choice" data-grp="3"><span class="k">3</span><span>16–19 år</span></button>
+  </div>
+  <div><button class="btn" id="go-brief1" disabled>Videre</button></div>
+</section>
+
+<!-- 3. briefing before a block -->
+<section id="s-brief" class="stack" hidden>
+  <span class="progress" id="briefProgress"></span>
+  <h2 id="briefTitle"></h2>
+  <div id="briefBody" class="stack"></div>
+  <div><button class="btn" id="briefNext"></button></div>
+</section>
+
+<!-- 4. practice -->
+<section id="s-practice" class="stack" hidden>
+  <span class="progress">Øving</span>
+  <h2>Prøv linjalen først</h2>
+  <p class="muted">Dra den grønne knappen nedover mens du leser. Alt du har lest blir dekket til. Du kan også trykke i teksten for å flytte linjen dit.</p>
+  <div class="passage-wrap" id="practiceWrap">
+    <div class="passage" id="practiceText">
+      <p>Dette er en øvingstekst. Den teller ikke med i resultatet.</p>
+      <p>Dra knappen nedover etter hvert som du leser, slik at linjen følger der du er. Da blir linjene over dekket til, og det blir lettere å holde plassen.</p>
+      <p>Du bestemmer selv hvor fort du drar. Gå videre når du synes det sitter.</p>
+    </div>
+  </div>
+  <div><button class="btn" id="practiceNext" disabled>Jeg er klar</button></div>
+</section>
+
+<!-- 5. reading -->
+<section id="s-read" class="stack" hidden>
+  <span class="progress" id="readProgress"></span>
+  <div class="passage-wrap" id="readWrap">
+    <div class="passage" id="readText"></div>
+  </div>
+  <hr>
+  <div><button class="btn" id="readDone">Ferdig lest</button></div>
+</section>
+
+<!-- 6. questions -->
+<section id="s-quiz" class="stack" hidden>
+  <span class="progress" id="quizProgress"></span>
+  <h2>Tre spørsmål om teksten</h2>
+  <div id="quizBody" class="stack" style="gap:20px"></div>
+  <div><button class="btn" id="quizNext" disabled>Videre</button></div>
+</section>
+
+<!-- 7. done -->
+<section id="s-done" class="stack" hidden>
+  <span class="eyebrow">Ferdig</span>
+  <h1>Takk for hjelpen</h1>
+
+  <div id="sendPending" class="stack" hidden>
+    <p>Lagrer svarene dine …</p>
+  </div>
+
+  <div id="sendOk" class="stack" hidden>
+    <p>Svarene dine er lagret. Du kan lukke siden.</p>
+  </div>
+
+  <div id="sendFail" class="stack" hidden>
+    <p>Svarene ble ikke lagret automatisk. Gi koden under til den som satte opp testen, så går ingenting tapt.</p>
+    <div class="codebox" id="resultCode"></div>
+    <div class="row">
+      <button class="btn" id="copyCode">Kopier kode</button>
+      <button class="btn-quiet" id="retrySend">Prøv å lagre igjen</button>
+      <span class="pill" id="copyState" hidden>Kopiert</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- content ---------- */
+var TEXTS = {
+ 1:{
+  A:{title:"Bier og blomster",
+    body:["Når en bie lander på en blomst, er den ute etter mat. Blomsten har en søt væske som heter nektar, og den har også pollen. Bien suger i seg nektaren og tar med seg pollen på de hårete beina sine.",
+"Men blomsten får noe igjen. Når bien flyr videre til neste blomst, faller litt av pollenet av. Da kan blomsten lage frø. Uten frø blir det ingen nye planter neste år.",
+"Mange av plantene vi spiser, trenger hjelp av bier. Epler, jordbær og agurk er noen av dem. Hvis det blir færre bier, blir det også mindre mat.",
+"De siste årene har forskere sett at det blir færre bier i mange land. En grunn er at det finnes færre blomsterenger enn før. En annen grunn er sprøytemidler som bøndene bruker mot skadedyr.",
+"Noen bønder har begynt å la en stripe med blomster stå langs åkeren. Da får biene mat, og bonden får bedre avling."],
+    q:[{t:"Hva tar bien med seg fra blomsten?",o:["Bare nektar","Nektar og pollen","Frø","Blader"],c:1},
+       {t:"Hvorfor er bier viktige for plantene?",o:["De spiser skadedyr","De vanner plantene","De frakter pollen, slik at plantene kan lage frø","De graver i jorda"],c:2},
+       {t:"Hva gjør noen bønder for å hjelpe biene?",o:["De slutter å dyrke epler","De lar en stripe med blomster stå langs åkeren","De setter ut vann","De flytter biene inn om vinteren"],c:1}]},
+  B:{title:"Maur og maurtuer",
+    body:["En maurtue ser ut som en haug med barnåler, men inni er den full av ganger og rom. Maurene bygger tua selv, nål for nål. En stor tue kan være hjem for flere hundre tusen maur.",
+"Inne i tua er det varmere enn ute. Maurene passer på temperaturen hele tiden. Når sola skinner, går mange maur ut og varmer seg. Så går de inn igjen og gir varmen fra seg til tua.",
+"Hver maur har sin egen jobb. Noen henter mat, noen bygger, og noen passer på eggene. Dronningen gjør bare én ting: hun legger egg. Hun kan leve i mange år.",
+"Maur er nyttige i skogen. De spiser insekter som kan skade trærne, og de blander jorda når de graver. Der det er mange maurtuer, er skogen ofte friskere.",
+"Hvis du finner en maurtue, bør du la den stå. Det tar mange år å bygge en ny."],
+    q:[{t:"Hva er en maurtue bygget av?",o:["Jord og stein","Barnåler","Gress","Bark fra trær"],c:1},
+       {t:"Hvordan holder maurene tua varm?",o:["De tenner på barnåler","De varmer seg i sola og gir varmen fra seg inne i tua","De bærer inn varmt vann","De lukker alle ganger"],c:1},
+       {t:"Hva er dronningens oppgave?",o:["Å bygge tua","Å hente mat","Å legge egg","Å passe på temperaturen"],c:2}]}
+ },
+ 2:{
+  A:{title:"Nordlys",
+    body:["Nordlys oppstår fordi sola sender ut en strøm av ladde partikler. Denne strømmen kalles solvind, og den treffer jorda hele tiden. De fleste partiklene blir avbøyd av jordas magnetfelt, som fungerer omtrent som et skjold.",
+"Men nær polene er magnetfeltet åpnere. Der kan partiklene følge magnetfeltlinjene og komme langt ned i atmosfæren. Når de kolliderer med gassene der oppe, overfører de energi til gassmolekylene. Molekylene gir energien fra seg igjen som lys.",
+"Fargen avhenger av hvilken gass som treffes, og hvor høyt oppe det skjer. Oksygen gir grønt lys i omtrent 100 til 150 kilometers høyde. Høyere oppe gir oksygen et rødt skjær, men dette er svakere og sjeldnere. Nitrogen gir blått og fiolett, ofte nederst i nordlysbuen.",
+"Nordlys er derfor ikke jevnt fordelt over hele himmelen. Det danner et belte rundt den magnetiske polen, kalt nordlysovalen. Oslo ligger som regel utenfor dette beltet, mens Tromsø ligger midt i det. Det er grunnen til at nordlys er langt vanligere i Nord-Norge.",
+"Når sola er spesielt aktiv, utvider ovalen seg sørover. Da kan nordlys ses helt nede i Sør-Europa. Slike kraftige utbrudd kan samtidig forstyrre radiosamband og satellitter, og i sjeldne tilfeller påvirke strømnettet på bakken."],
+    q:[{t:"Hvorfor ser vi nordlys oftest nær polene?",o:["Sola står lavere der","Magnetfeltet er åpnere der, så partiklene kommer ned i atmosfæren","Lufta er kaldere der","Atmosfæren er tynnere ved ekvator"],c:1},
+       {t:"Hva bestemmer fargen på nordlyset?",o:["Temperaturen på bakken","Hvor fort solvinden beveger seg","Hvilken gass som treffes, og hvor høyt det skjer","Årstiden"],c:2},
+       {t:"Hva kan skje når sola er spesielt aktiv?",o:["Nordlysovalen trekker seg sammen mot polen","Nordlyset blir bare grønt","Ovalen utvider seg sørover og kan forstyrre satellitter","Nordlyset forsvinner helt"],c:2}]},
+  B:{title:"Tidevann",
+    body:["Tidevann skyldes først og fremst månens tyngdekraft. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
+"Samtidig oppstår det en tilsvarende bulning på motsatt side av jorda. Grunnen er at jorda selv blir trukket mer mot månen enn vannet som ligger lengst unna. Resultatet er to flodbulninger, på hver sin side av kloden.",
+"Jorda roterer gjennom disse bulningene i løpet av et døgn. Et sted på kysten passerer derfor to ganger gjennom flo og to ganger gjennom fjære hvert døgn. Siden månen også beveger seg i sin egen bane, forskyves tidspunktene med omtrent 50 minutter hver dag.",
+"Sola virker på samme måte, men svakere, fordi den er så langt unna. Når sol og måne står på linje, legger kreftene seg oppå hverandre. Da blir forskjellen mellom flo og fjære ekstra stor, og vi kaller det springflo. Står de i rett vinkel på hverandre, motvirker de delvis hverandre, og forskjellen blir liten.",
+"Kystens form har også mye å si. I trange fjorder og smale sund kan vannet presses sammen, og tidevannsforskjellen blir langt større enn ute i åpent hav."],
+    q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Sola trekker fra den siden","Jorda selv trekkes mer mot månen enn vannet lengst unna","Vinden presser vannet dit","Havbunnen skyver vannet opp"],c:1},
+       {t:"Hvorfor forskyves tidspunktene for flo og fjære hver dag?",o:["Jorda roterer saktere om vinteren","Sola endrer posisjon","Månen beveger seg i sin egen bane","Vannet blir tyngre"],c:2},
+       {t:"Når blir forskjellen mellom flo og fjære størst?",o:["Når sol og måne står i rett vinkel","Når månen er lengst unna","Når sol og måne står på linje","Om sommeren"],c:2}]}
+ },
+ 3:{
+  A:{title:"Antibiotikaresistens",
+    body:["Antibiotika er medisiner som dreper bakterier. De virker ved å ødelegge deler bakterien trenger for å leve, for eksempel den ytre veggen rundt cellen. Menneskeceller har ikke en slik vegg. Derfor rammer medisinen bakterien og ikke pasienten.",
+"Bakterier formerer seg svært raskt. Hver gang de deler seg, kan det oppstå små tilfeldige endringer i arvestoffet. Noen av disse endringene gjør bakterien motstandsdyktig mot en bestemt medisin. Når medisinen brukes, dør de vanlige bakteriene, mens de motstandsdyktige overlever og formerer seg videre. Etter en stund er det bare disse igjen.",
+"Bakterier kan også gi slike egenskaper videre til hverandre, ikke bare til sine egne avkom. En egenskap som oppstår hos én type bakterie, kan derfor dukke opp hos en helt annen type.",
+"Jo mer antibiotika som brukes, jo raskere går utviklingen. Resepter som ikke trengs, kurer som avbrytes, og stor bruk i husdyrhold bidrar alle. Samtidig lages det få nye antibiotika. Å utvikle en ny medisin er dyrt, og den skal helst brukes minst mulig. Det gjør det lite lønnsomt.",
+"Dette rammer mer enn vanlige infeksjoner. Operasjoner og kreftbehandling forutsetter at infeksjoner kan stoppes."],
+    q:[{t:"Hvorfor rammer antibiotika bakteriene og ikke pasienten?",o:["Bakterier er mindre enn menneskeceller","Menneskeceller har ikke den ytre veggen som medisinen ødelegger","Medisinen brytes ned før den når cellene våre","Kroppen varmer opp medisinen"],c:1},
+       {t:"Hvorfor blir det flere motstandsdyktige bakterier når medisinen brukes?",o:["Medisinen skaper nye bakterier","Bakteriene slutter å dele seg","De vanlige dør, mens de motstandsdyktige overlever og formerer seg","Bakteriene flytter seg til andre deler av kroppen"],c:2},
+       {t:"Hvorfor lages det få nye antibiotika?",o:["Forskerne finner ingen nye bakterier","De gamle virker fortsatt like bra","Det er dyrt, og medisinen skal helst brukes minst mulig","Det er forbudt i de fleste land"],c:2}]},
+  B:{title:"Kunstgjødsel og nitrogen",
+    body:["Planter trenger nitrogen for å vokse. Nesten 80 prosent av lufta rundt oss er nitrogen, men plantene kan ikke bruke det slik det er. Nitrogenet i lufta sitter nemlig bundet sammen to og to, og den bindingen er svært sterk. Den må brytes først.",
+"I naturen er det bakterier som gjør denne jobben. De sitter blant annet på røttene til erter og kløver. Fram til rundt år 1900 var det dette som bestemte hvor mye mat en åker kunne gi.",
+"Rundt 1910 fant man en måte å gjøre det samme i fabrikk. Nitrogen fra lufta blir presset sammen med hydrogen under høyt trykk og høy varme. Resultatet kan gjøres om til kunstgjødsel. Plutselig kunne bøndene dyrke langt mer mat på samme areal enn før.",
+"Men det har en bakside. Prosessen bruker mye energi, og hydrogenet hentes som regel fra naturgass. I tillegg tar ikke plantene opp all gjødselen. Resten renner ut i elver og innsjøer. Der vokser alger kraftig. Når algene dør, bruker nedbrytingen opp oksygenet i vannet, og fisk og andre dyr kveles.",
+"Derfor jobber forskere med to ting: å lage hydrogenet med fornybar kraft, og å gjødsle mer nøyaktig."],
+    q:[{t:"Hvorfor kan ikke plantene bruke nitrogenet i lufta slik det er?",o:["Det er for lite nitrogen i lufta","Nitrogenet sitter bundet sammen med en svært sterk binding","Nitrogenet sitter for høyt oppe","Røttene når ikke opp i lufta"],c:1},
+       {t:"Hva ble mulig etter oppfinnelsen rundt 1910?",o:["Bøndene sluttet å dyrke erter og kløver","Landbruket begynte å bruke mindre energi","Bøndene kunne dyrke langt mer mat på samme areal","Gjødsel kunne hentes rett fra havet"],c:2},
+       {t:"Hvorfor kveles fisk i vann med mye gjødsel i?",o:["Gjødselen er giftig for fisk","Vannet blir for varmt","Nedbrytingen av alger bruker opp oksygenet i vannet","Algene spiser opp maten til fisken"],c:2}]}
+ }
+};
+
+/* ---------- state ---------- */
+var S={
+  grp:null,
+  order:null,      // "PM" = plain first, "MP" = masked first
+  texts:null,      // [textKeyBlock1, textKeyBlock2]
+  conds:null,      // ["plain","mask"] etc
+  block:0,
+  practiceDone:false,
+  res:[null,null], // {ms, score, answers, maskPct}
+  blur:0
+};
+
+var el=function(id){return document.getElementById(id);};
+var screens=["s-intro","s-age","s-brief","s-practice","s-read","s-quiz","s-done"];
+function show(id){screens.forEach(function(s){el(s).hidden=(s!==id);});window.scrollTo(0,0);}
+
+document.addEventListener("visibilitychange",function(){if(document.hidden)S.blur++;});
+
+function device(){
+  var w=Math.min(window.screen.width,window.screen.height);
+  if(w<520)return "mob";
+  if(w<900)return "tab";
+  return "pc";
+}
+
+/* assignment: 4 cells, random. ?c=1..4 forces a cell for checking. */
+function assign(){
+  var forced=null,m=/[?&]c=([1-4])/.exec(location.search);
+  if(m)forced=parseInt(m[1],10);
+  var cell=forced||(1+Math.floor(Math.random()*4));
+  // cell 1: A plain, B mask | 2: B plain, A mask | 3: A mask, B plain | 4: B mask, A plain
+  var map={1:["A","B","plain","mask"],2:["B","A","plain","mask"],
+           3:["A","B","mask","plain"],4:["B","A","mask","plain"]};
+  var c=map[cell];
+  S.texts=[c[0],c[1]];
+  S.conds=[c[2],c[3]];
+  S.order=(c[2]==="plain")?"PM":"MP";
+}
+
+/* ---------- mask mechanism ---------- */
+var mask={wrap:null,y:0,max:0,maxReached:0,active:false,onMove:null};
+
+function buildMaskDom(){
+  var layer=document.createElement("div");layer.id="maskLayer";
+  layer.innerHTML='<div id="maskFill"></div><div id="maskFade"></div>';
+  var h=document.createElement("button");h.id="maskHandle";h.type="button";
+  h.setAttribute("aria-label","Flytt leselinjen");
+  h.innerHTML='<div class="grip">'+
+    '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">'+
+    '<path d="M8 1.5 L11 5 H5 Z M8 14.5 L5 11 H11 Z" fill="#fff"/></svg></div>';
+  return {layer:layer,handle:h};
+}
+
+function attachMask(wrapEl,onMove){
+  var d=buildMaskDom();
+  wrapEl.appendChild(d.layer);wrapEl.appendChild(d.handle);
+  mask.wrap=wrapEl;mask.onMove=onMove||null;mask.active=true;
+  mask.y=0;mask.maxReached=0;
+  d.layer.style.display="block";d.handle.style.display="flex";
+  requestAnimationFrame(function(){
+    mask.max=wrapEl.getBoundingClientRect().height;
+    setMask(0);
+  });
+
+  function clientYtoLocal(cy){
+    var r=wrapEl.getBoundingClientRect();
+    return Math.max(0,Math.min(r.height,cy-r.top));
+  }
+  var dragging=false;
+  d.handle.addEventListener("pointerdown",function(e){
+    dragging=true;d.handle.setPointerCapture(e.pointerId);e.preventDefault();
+  });
+  d.handle.addEventListener("pointermove",function(e){
+    if(!dragging)return;setMask(clientYtoLocal(e.clientY));
+  });
+  function stop(e){if(dragging){dragging=false;try{d.handle.releasePointerCapture(e.pointerId);}catch(x){}}}
+  d.handle.addEventListener("pointerup",stop);
+  d.handle.addEventListener("pointercancel",stop);
+  d.handle.addEventListener("keydown",function(e){
+    var step=e.shiftKey?60:18;
+    if(e.key==="ArrowDown"){setMask(mask.y+step);e.preventDefault();}
+    else if(e.key==="ArrowUp"){setMask(mask.y-step);e.preventDefault();}
+  });
+  wrapEl.addEventListener("click",function(e){
+    if(e.target.closest("#maskHandle"))return;
+    setMask(clientYtoLocal(e.clientY));
+  });
+  window.addEventListener("resize",function(){
+    if(mask.wrap===wrapEl){mask.max=wrapEl.getBoundingClientRect().height;setMask(mask.y);}
+  });
+}
+
+function setMask(y){
+  if(!mask.active||!mask.wrap)return;
+  var h=mask.wrap.getBoundingClientRect().height;
+  mask.max=h;
+  mask.y=Math.max(0,Math.min(h,y));
+  if(mask.y>mask.maxReached)mask.maxReached=mask.y;
+  var layer=el("maskLayer"),handle=el("maskHandle");
+  if(layer)layer.style.height=mask.y+"px";
+  if(handle)handle.style.top=mask.y+"px";
+  if(mask.onMove)mask.onMove(mask.max?mask.y/mask.max:0);
+}
+
+function detachMask(){
+  if(mask.wrap){
+    var l=mask.wrap.querySelector("#maskLayer"),h=mask.wrap.querySelector("#maskHandle");
+    if(l)l.remove();if(h)h.remove();
+  }
+  var pct=mask.max?Math.round(100*mask.maxReached/mask.max):0;
+  mask.active=false;mask.wrap=null;mask.onMove=null;
+  return pct;
+}
+
+/* ---------- flow ---------- */
+el("go-age").addEventListener("click",function(){show("s-age");});
+
+var ageBtns=el("ageChoices").querySelectorAll(".choice");
+ageBtns.forEach(function(b){
+  b.addEventListener("click",function(){
+    ageBtns.forEach(function(x){x.setAttribute("aria-pressed","false");});
+    b.setAttribute("aria-pressed","true");
+    S.grp=parseInt(b.dataset.grp,10);
+    el("go-brief1").disabled=false;
+  });
+});
+el("go-brief1").addEventListener("click",function(){assign();S.block=0;brief();});
+
+function brief(){
+  var cond=S.conds[S.block];
+  el("briefProgress").textContent="Tekst "+(S.block+1)+" av 2";
+  var body=el("briefBody");body.innerHTML="";
+  function p(t,cls){var e=document.createElement("p");if(cls)e.className=cls;e.textContent=t;body.appendChild(e);}
+  if(cond==="plain"){
+    el("briefTitle").textContent="Les teksten på vanlig måte";
+    p("Teksten kommer på neste side. Les den i ditt vanlige tempo.");
+    p("Når du er ferdig, trykker du «Ferdig lest» nederst. Så får du tre spørsmål.");
+    p("Tiden starter når du trykker på knappen under.","muted");
+    el("briefNext").textContent="Start lesingen";
+  }else{
+    el("briefTitle").textContent="Denne gangen bruker du en leselinje";
+    p("Du får en grønn knapp på siden av teksten. Dra den nedover mens du leser.");
+    p("Alt du har lest, blir dekket til. Det gjør det lettere å holde plassen og ikke hoppe tilbake.");
+    if(!S.practiceDone)p("Du får først prøve den på en kort øvingstekst.","muted");
+    else p("Tiden starter når du trykker på knappen under.","muted");
+    el("briefNext").textContent=S.practiceDone?"Start lesingen":"Prøv leselinjen";
+  }
+  show("s-brief");
+}
+
+el("briefNext").addEventListener("click",function(){
+  if(S.conds[S.block]==="mask"&&!S.practiceDone)startPractice();
+  else startRead();
+});
+
+function startPractice(){
+  show("s-practice");
+  var wrap=el("practiceWrap");
+  el("practiceNext").disabled=true;
+  attachMask(wrap,function(frac){
+    if(frac>=0.6)el("practiceNext").disabled=false;
+  });
+}
+el("practiceNext").addEventListener("click",function(){
+  detachMask();S.practiceDone=true;brief();
+});
+
+var t0=0;
+function startRead(){
+  var key=S.texts[S.block],cond=S.conds[S.block];
+  var d=TEXTS[S.grp][key];
+  el("readProgress").textContent="Tekst "+(S.block+1)+" av 2";
+  var box=el("readText");box.innerHTML="";
+  var h=document.createElement("h3");h.textContent=d.title;box.appendChild(h);
+  d.body.forEach(function(para){var p=document.createElement("p");p.textContent=para;box.appendChild(p);});
+  show("s-read");
+  if(cond==="mask")attachMask(el("readWrap"),null);
+  t0=performance.now();
+}
+
+el("readDone").addEventListener("click",function(){
+  var ms=Math.round(performance.now()-t0);
+  var pct=(S.conds[S.block]==="mask")?detachMask():null;
+  S.res[S.block]={ms:ms,maskPct:pct,answers:[],score:0};
+  startQuiz();
+});
+
+function startQuiz(){
+  var key=S.texts[S.block],qs=TEXTS[S.grp][key].q;
+  el("quizProgress").textContent="Spørsmål om tekst "+(S.block+1);
+  var body=el("quizBody");body.innerHTML="";
+  var picked=[null,null,null];
+  qs.forEach(function(q,qi){
+    var wrap=document.createElement("div");wrap.className="q";
+    var t=document.createElement("div");t.className="qtext";t.textContent=(qi+1)+". "+q.t;
+    var ch=document.createElement("div");ch.className="choices";
+    q.o.forEach(function(opt,oi){
+      var b=document.createElement("button");b.type="button";b.className="choice";
+      b.setAttribute("aria-pressed","false");
+      b.innerHTML='<span class="k">'+"abcd"[oi]+'</span>';
+      var sp=document.createElement("span");sp.textContent=opt;b.appendChild(sp);
+      b.addEventListener("click",function(){
+        ch.querySelectorAll(".choice").forEach(function(x){x.setAttribute("aria-pressed","false");});
+        b.setAttribute("aria-pressed","true");
+        picked[qi]=oi;
+        el("quizNext").disabled=picked.some(function(v){return v===null;});
+      });
+      ch.appendChild(b);
+    });
+    wrap.appendChild(t);wrap.appendChild(ch);body.appendChild(wrap);
+  });
+  el("quizNext").disabled=true;
+  el("quizNext").textContent=(S.block===0)?"Videre til neste tekst":"Lever";
+  el("quizNext").onclick=function(){
+    var r=S.res[S.block];
+    r.answers=picked.slice();
+    r.score=picked.reduce(function(a,v,i){return a+(v===qs[i].c?1:0);},0);
+    if(S.block===0){S.block=1;brief();}else finish();
+  };
+  show("s-quiz");
+}
+
+var SUPA_URL="https://ekuixxfmuojdqmmonqmz.supabase.co/rest/v1/lesetest";
+var SUPA_KEY="sb_publishable_CHcpsTYRtABfeNjJctMgxg_ItMv2E9P";
+
+function buildRow(){
+  var km=/[?&]k=([A-Za-z0-9_\-]{1,40})/.exec(location.search);
+  var row={grp:S.grp,ord:S.order,dev:device(),blur:S.blur,klasse:km?km[1]:null};
+  [0,1].forEach(function(i){
+    var n=i+1,r=S.res[i];
+    row["txt"+n]=S.texts[i];
+    row["cnd"+n]=(S.conds[i]==="mask")?"M":"P";
+    row["ms"+n]=r.ms;
+    row["sc"+n]=r.score;
+    row["ans"+n]=r.answers.map(function(v){return "abcd"[v];}).join("");
+    row["mpc"+n]=(S.conds[i]==="mask")?r.maskPct:null;
+  });
+  return row;
+}
+
+function buildCode(row){
+  var p=["MK1","grp="+row.grp,"ord="+row.ord,"dev="+row.dev];
+  if(row.klasse)p.push("k="+row.klasse);
+  [1,2].forEach(function(n){
+    p.push("txt"+n+"="+row["txt"+n],"cnd"+n+"="+row["cnd"+n],
+           "ms"+n+"="+row["ms"+n],"sc"+n+"="+row["sc"+n],"ans"+n+"="+row["ans"+n]);
+    if(row["mpc"+n]!==null)p.push("mpc"+n+"="+row["mpc"+n]);
+  });
+  p.push("blur="+row.blur);
+  return p.join(";");
+}
+
+function send(row,attempt){
+  attempt=attempt||1;
+  var ctrl=new AbortController();
+  var timer=setTimeout(function(){ctrl.abort();},10000);
+  return fetch(SUPA_URL,{
+    method:"POST",
+    headers:{"apikey":SUPA_KEY,"Authorization":"Bearer "+SUPA_KEY,
+             "Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify(row),
+    signal:ctrl.signal
+  }).then(function(res){
+    clearTimeout(timer);
+    if(res.ok)return true;
+    if(res.status>=500&&attempt<3)return wait(900*attempt).then(function(){return send(row,attempt+1);});
+    return false;
+  }).catch(function(){
+    clearTimeout(timer);
+    if(attempt<3)return wait(900*attempt).then(function(){return send(row,attempt+1);});
+    return false;
+  });
+}
+function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+
+var lastRow=null;
+function finish(){
+  lastRow=buildRow();
+  el("resultCode").textContent=buildCode(lastRow);
+  el("sendPending").hidden=false;el("sendOk").hidden=true;el("sendFail").hidden=true;
+  show("s-done");
+  attemptSend();
+}
+
+function attemptSend(){
+  el("sendPending").hidden=false;el("sendFail").hidden=true;
+  send(lastRow).then(function(ok){
+    el("sendPending").hidden=true;
+    el("sendOk").hidden=!ok;
+    el("sendFail").hidden=ok;
+  });
+}
+el("retrySend").addEventListener("click",attemptSend);
+
+el("copyCode").addEventListener("click",function(){
+  var txt=el("resultCode").textContent;
+  var ok=function(){el("copyState").hidden=false;setTimeout(function(){el("copyState").hidden=true;},2200);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok,function(){selectCode();});
+  }else selectCode();
+  function selectCode(){
+    var r=document.createRange();r.selectNodeContents(el("resultCode"));
+    var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+  }
+});
+
+})();
+</script>
+</body></html>
