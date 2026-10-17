@@ -162,7 +162,7 @@ hr{border:none;border-top:1px solid var(--line);margin:0}
   <div class="passage-wrap" id="practiceWrap">
     <div class="passage" id="practiceText">
       <p>Dette er en øvingstekst. Den teller ikke med i resultatet.</p>
-      <p>Dra knappen nedover etter hvert som du leser, slik at linjen følger der du er. Da blir linjene over dekket til, og det blir lettere å holde plassen.</p>
+      <p>Dra knappen nedover etter hvert som du leser, slik at linjen følger der du er. Da blir linjene du har lest dekket til, så du tydelig ser hvor du er i teksten.</p>
       <p>Du bestemmer selv hvor fort du drar. Gå videre når du synes det sitter.</p>
     </div>
   </div>
@@ -242,8 +242,8 @@ var TEXTS = {
  },
  2:{
   A:{title:"Nordlys",
-    body:["Nordlys oppstår fordi sola sender ut en strøm av ladde partikler. Denne strømmen kalles solvind, og den treffer jorda hele tiden. De fleste partiklene blir avbøyd i magnetosfæren og kommer aldri ned.",
-"Men nær polene er magnetfeltet åpnere. Der kan partiklene følge magnetfeltlinjene og komme langt ned i atmosfæren. Når de kolliderer med gassene der oppe, overfører de energi til gassmolekylene. De eksiterte molekylene gir energien fra seg igjen som lys.",
+    body:["Nordlys oppstår fordi sola sender ut en strøm av ladde partikler. Denne strømmen kalles solvind, og den treffer jorda hele tiden. De fleste partiklene blir avbøyd av jordas magnetfelt og kommer aldri ned.",
+"Men nær polene er magnetfeltet åpnere. Der kan partiklene følge magnetfeltlinjene og komme langt ned i atmosfæren. Når de kolliderer med gassene der oppe, overfører de energi til gassmolekylene. Molekylene sitter igjen med denne energien et kort øyeblikk, før de gir den fra seg igjen som lys.",
 "Fargen avhenger av hvilken gass som treffes, og hvor høyt oppe det skjer. Oksygen gir grønt lys i omtrent 100 til 150 kilometers høyde. Høyere oppe gir oksygen et rødt skjær, men dette er svakere og sjeldnere. Nitrogen gir blått og fiolett, ofte nederst i nordlysbuen.",
 "Nordlys er derfor ikke jevnt fordelt over hele himmelen. Fordi partiklene følger magnetfeltlinjene inn mot polene, samler nordlyset seg i et belte i stedet for å spre seg jevnt utover himmelen. Beltet kalles nordlysovalen. Oslo ligger som regel utenfor det, mens Tromsø ligger midt i det.",
 "Når sola er spesielt aktiv, utvider ovalen seg sørover. Da kan nordlys ses helt nede i Sør-Europa. Slike kraftige utbrudd kan samtidig forstyrre radiosamband og satellitter."],
@@ -251,11 +251,11 @@ var TEXTS = {
        {t:"Hva bestemmer fargen på nordlyset?",o:["Temperaturen på bakken","Farten til solvinden","Hvilken gass som treffes","Årstiden"],c:2},
        {t:"Hva kan skje når sola er spesielt aktiv?",o:["Ovalen trekker seg mot polen","Nordlyset blir bare grønt","Nordlyset forsvinner helt","Ovalen utvider seg sørover"],c:3}]},
   B:{title:"Tidevann",
-    body:["Tidevann skyldes først og fremst tidekreftene fra månen. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
+    body:["Tidevann skyldes først og fremst tyngdekraften fra månen. Månen trekker i alt på jorda, men den trekker sterkest i det som ligger nærmest. Havet på den siden som vender mot månen, blir derfor dratt litt utover, og det dannes en flodbulning.",
 "Samtidig oppstår det en tilsvarende bulning på motsatt side av jorda. Grunnen er at jorda i seg selv blir trukket mer mot månen enn vannet som ligger lengst unna. Resultatet er to flodbulninger, på hver sin side av kloden.",
 "Jorda roterer gjennom disse bulningene i løpet av et døgn. Et sted på kysten passerer derfor to ganger gjennom flo og to ganger gjennom fjære hvert døgn. Siden månen også beveger seg i sin egen bane, forskyves tidspunktene med omtrent 50 minutter hver dag.",
 "Sola virker på samme måte, men svakere, fordi den er så langt unna. Når sol og måne står på linje, legger kreftene seg oppå hverandre. Da blir forskjellen mellom flo og fjære ekstra stor, og vi kaller det springflo. Står de i rett vinkel på hverandre, motvirker de delvis hverandre.",
-"Kystens form har også mye å si. Når tidevannsbølgen presses inn i en stadig trangere fjord, øker amplituden innover, og forskjellen mellom flo og fjære blir derfor større innerst enn ute ved munningen."],
+"Kystens form har også mye å si. Når tidevannsbølgen presses inn i en fjord som blir smalere og smalere innover, må den samme vannmengden fylle et stadig trangere rom, og forskjellen mellom flo og fjære blir derfor større innerst enn ute ved munningen."],
     q:[{t:"Hvorfor oppstår det en flodbulning også på siden som vender bort fra månen?",o:["Havstrømmer fører vannet dit","Jorda trekkes mer mot månen enn vannet","Vinden presser vannet utover","Havbunnen skyver vannet opp"],c:1},
        {t:"Hvorfor forskyves tidspunktene for flo og fjære hver dag?",o:["Jorda roterer saktere om vinteren","Sola flytter seg nærmere jorda","Månen beveger seg i egen bane","Vannet blir tyngre om natta"],c:2},
        {t:"Når blir forskjellen mellom flo og fjære størst?",o:["Når sol og måne står på linje","Når sol og måne står i rett vinkel","Når månen er lengst unna jorda","Når det er storm på havet"],c:0}]}
@@ -404,7 +404,7 @@ function brief(){
   }else{
     el("briefTitle").textContent="Denne gangen bruker du en leselinje";
     p("Du får en grønn knapp på siden av teksten. Dra den nedover mens du leser.");
-    p("Alt du har lest, blir dekket til. Det gjør det lettere å holde plassen og ikke hoppe tilbake.");
+    p("Alt du har lest, blir dekket til. Da ser du tydelig hvor du er, og slipper å lete deg tilbake.");
     if(!S.practiceDone)p("Du får først prøve den på en kort øvingstekst.","muted");
     else p("Tiden starter når du trykker på knappen under.","muted");
     el("briefNext").textContent=S.practiceDone?"Start lesingen":"Prøv leselinjen";
