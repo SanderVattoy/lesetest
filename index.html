@@ -62,6 +62,9 @@ button{font-family:var(--ui);font-size:1rem;cursor:pointer}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn-quiet{background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:13px 22px;font-weight:500;min-height:48px}
 .choices{display:flex;flex-direction:column;gap:10px}
+.choices.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.choice.ctr{justify-content:center;text-align:center;font-weight:500}
+@media (max-width:420px){.choices.grid{grid-template-columns:repeat(2,1fr)}}
 .choice{
   display:flex;gap:12px;align-items:flex-start;
   border:1px solid var(--line);border-radius:8px;padding:13px 15px;
@@ -139,9 +142,13 @@ hr{border:none;border-top:1px solid var(--line);margin:0}
 <!-- 2. age -->
 <section id="s-age" class="stack" hidden>
   <h2>Hvilket trinn går du i?</h2>
-  <div class="choices" id="ageChoices">
-    <button class="choice" data-grp="1"><span class="k">1</span><span>5.–7. trinn</span></button>
-    <button class="choice" data-grp="2"><span class="k">2</span><span>8.–10. trinn</span></button>
+  <div class="choices grid" id="ageChoices">
+    <button class="choice ctr" data-trinn="5"><span>5. trinn</span></button>
+    <button class="choice ctr" data-trinn="6"><span>6. trinn</span></button>
+    <button class="choice ctr" data-trinn="7"><span>7. trinn</span></button>
+    <button class="choice ctr" data-trinn="8"><span>8. trinn</span></button>
+    <button class="choice ctr" data-trinn="9"><span>9. trinn</span></button>
+    <button class="choice ctr" data-trinn="10"><span>10. trinn</span></button>
   </div>
   <div><button class="btn" id="go-brief1" disabled>Videre</button></div>
 </section>
@@ -264,6 +271,7 @@ var TEXTS = {
 
 /* ---------- state ---------- */
 var S={
+  trinn:null,
   grp:null,
   order:null,      // "PM" = plain first, "MP" = masked first
   texts:null,      // [textKeyBlock1, textKeyBlock2]
@@ -384,7 +392,8 @@ ageBtns.forEach(function(b){
   b.addEventListener("click",function(){
     ageBtns.forEach(function(x){x.setAttribute("aria-pressed","false");});
     b.setAttribute("aria-pressed","true");
-    S.grp=parseInt(b.dataset.grp,10);
+    S.trinn=parseInt(b.dataset.trinn,10);
+    S.grp=(S.trinn<=7)?1:2;   // 5-7 -> tekstsett 1, 8-10 -> tekstsett 2
     el("go-brief1").disabled=false;
   });
 });
@@ -490,7 +499,7 @@ var SUPA_KEY="sb_publishable_CHcpsTYRtABfeNjJctMgxg_ItMv2E9P";
 
 function buildRow(){
   var km=/[?&]k=([A-Za-z0-9_\-]{1,40})/.exec(location.search);
-  var row={grp:S.grp,ord:S.order,dev:device(),blur:S.blur,klasse:km?km[1]:null};
+  var row={trinn:S.trinn,grp:S.grp,ord:S.order,dev:device(),blur:S.blur,klasse:km?km[1]:null};
   [0,1].forEach(function(i){
     var n=i+1,r=S.res[i];
     row["txt"+n]=S.texts[i];
@@ -504,7 +513,7 @@ function buildRow(){
 }
 
 function buildCode(row){
-  var p=["MK1","grp="+row.grp,"ord="+row.ord,"dev="+row.dev];
+  var p=["MK1","trinn="+row.trinn,"grp="+row.grp,"ord="+row.ord,"dev="+row.dev];
   if(row.klasse)p.push("k="+row.klasse);
   [1,2].forEach(function(n){
     p.push("txt"+n+"="+row["txt"+n],"cnd"+n+"="+row["cnd"+n],
